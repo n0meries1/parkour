@@ -159,8 +159,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="renderer.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="texture.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="parkour.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resource\cubeVertex.shader" />
+    <None Include="Resource\cubeFragment.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

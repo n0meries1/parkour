@@ -2,6 +2,8 @@
 #include <glfw3.h>
 #include <iostream>
 
+#include "renderer.h"
+
 //prototyping
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void ProcessInput(GLFWwindow* window, float deltatime);
@@ -44,14 +46,19 @@ int main()
 		return -1;
 	}
 
+	renderer cube("Resource/cubeVertex.shader", "Resource/cubeFragment.shader");
 	while (!glfwWindowShouldClose(window))
 	{
 		float currentFrame = static_cast <float> (glfwGetTime());
 		deltatime = currentFrame - lastframe;
 		lastframe = currentFrame;
 		ProcessInput(window, deltatime);
+
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		cube.DrawSprite(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
