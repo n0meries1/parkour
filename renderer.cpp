@@ -3,8 +3,9 @@
 
 
 renderer::renderer(const char* vertex, const char* fragment, const char* filepath, bool alpha)
-    : Shader(vertex, fragment), Texture(new texture(filepath, alpha)), noTexture(false)
+    : Shader(vertex, fragment), Texture(filepath != nullptr ? new texture(filepath, alpha) : nullptr)
 {
+    noTexture = (filepath == nullptr);
     initRenderData();
 }
 
@@ -16,10 +17,10 @@ renderer::renderer(const char* vertex, const char* fragment)
 
 renderer::~renderer()
 {
-    if (Texture)
-        delete Texture;
     glDeleteVertexArrays(1, &this->quadVAO);
+    if (Texture) delete Texture;
 }
+
 
 void renderer::DrawSprite(glm::vec3 position, glm::vec3 size, float rotate, glm::vec3 color)
 {
@@ -34,10 +35,10 @@ void renderer::DrawSprite(glm::vec3 position, glm::vec3 size, float rotate, glm:
     this->Shader.SetMatrix4("model", model);
     this->Shader.SetVector3f("color", color);
 
-    if (noTexture)
+    if (!noTexture && Texture && Texture->loaded)
     {
         glActiveTexture(GL_TEXTURE0);
-        this->Texture->Bind();
+        Texture->Bind();
         Shader.SetInteger("image", 0);
     }
 

@@ -2,6 +2,13 @@
 
 texture::texture(const char* filepath, bool alpha)
 {
+	if (filepath == nullptr)
+	{
+		std::cerr << "ERROR::TEXTURE: No filepath provided" << std::endl;
+		loaded = false;
+		return;
+	}
+
 	int width, height, nrChannels;
 	unsigned char* data = stbi_load(filepath, &width, &height, &nrChannels, 0);
 	if (!data)
@@ -9,6 +16,8 @@ texture::texture(const char* filepath, bool alpha)
 		std::cerr << "ERROR::TEXTURE: Failed to load texture file" << filepath << std::endl; 
 		throw std::runtime_error("Failed to laod texture");
 	}
+
+	stbi_image_free(data);
 
 	glGenTextures(1, &this->ID);
 	glBindTexture(GL_TEXTURE_2D, this->ID);
@@ -27,16 +36,26 @@ texture::texture(const char* filepath, bool alpha)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
-
-	stbi_image_free(data);
+	loaded = true;
 }
+
 
 void texture::Bind() const
 {
-	glBindTexture(GL_TEXTURE_2D, this->ID);
+	if (loaded)
+	{
+		glBindTexture(GL_TEXTURE_2D, this->ID);
+	}
+	else
+	{
+		std::cerr << "ERROR::TEXTURE: Attempted to bind an unloaded texture" << std::endl;
+	}
 }
 
 void texture::Unbind() const
 {
-	glBindTexture(GL_TEXTURE_2D, 0);
+	if (loaded)
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
 }
