@@ -37,7 +37,7 @@ void renderer::DrawSprite(camera Camera, glm::vec3 position, glm::vec3 size, flo
     model = glm::scale(model, size);
     glm::mat4 projection = glm::perspective(glm::radians(m_Camera.m_zoom), SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
     glm::mat4 view = m_Camera.GetViewMatrix();
-    
+  
 
     this->Shader.SetMatrix4("model", model);
     this->Shader.SetMatrix4("projection", projection);

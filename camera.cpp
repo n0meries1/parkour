@@ -15,8 +15,8 @@ void camera::ProcessMouseMovement(float xoffset, float yoffset, bool constrainpi
 	xoffset *= m_sensitivity;
 	yoffset *= m_sensitivity;
 
-	m_yaw -= xoffset;
-	m_pitch -= yoffset;
+	m_yaw += xoffset;
+	m_pitch += yoffset;
 
 	if (constrainpitch)
 	{
@@ -33,13 +33,13 @@ void camera::ProcessKeyboardMovement(Camera_Movement direction, float deltatime)
 {
 	float velocity = m_movementspeed * deltatime;
 	if (direction == FORWARD)
-		m_position += m_front * velocity;
+		m_position += movementfront * velocity;
 	if (direction == BACKWARD)
-		m_position -= m_front * velocity;
+		m_position -= movementfront * velocity;
 	if (direction == LEFT)
-		m_position += m_right * velocity;
+		m_position += movementright * velocity;
 	if (direction == RIGHT)
-		m_position -= m_right * velocity;
+		m_position -= movementright * velocity;
 }
 
 void camera::ProcessScrollMovement(float scrolloffset)
@@ -51,6 +51,10 @@ void camera::ProcessScrollMovement(float scrolloffset)
 	if (m_zoom > 45.0f)
 		m_zoom = 45.0f;
 
+}
+void camera::UpdateCamera(const glm::vec3& playerposition)
+{
+	m_position = playerposition - m_front * 10.0f + glm::vec3(0.0f, 1.0f, 0.0f);
 }
 
 glm::mat4 camera::GetViewMatrix()
@@ -66,5 +70,6 @@ void camera::updateCameraVectors()
 	front.z = sin(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
 	m_front = glm::normalize(front);
 	m_right = glm::normalize(glm::cross(m_front, m_worldup));
-	m_up = glm::normalize(glm::cross(m_front, m_right));
+	m_up = glm::normalize(glm::cross(m_right, m_front));
+	
 }

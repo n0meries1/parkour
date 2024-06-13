@@ -4,6 +4,8 @@
 #include "shader.h"
 #include "texture.h"
 #include "camera.h"
+#include "Player.h"
+
 
 
 class renderer
