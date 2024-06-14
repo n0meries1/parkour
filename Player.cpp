@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(glm::vec3 startingPosition) : playerPosition(startingPosition), velocity(0.0f), acceleration(0.0f), onGround(true), gravity(-9.18f), jumpStrength(5.50f), jump(false), speedCap(10.0) {}
+Player::Player(glm::vec3 startingPosition) : playerPosition(startingPosition), velocity(0.0f), acceleration(0.0f), onGround(true), gravity(-9.18f), jumpStrength(5.50f), jump(false), speedCap(10.0), playerSize(glm::vec3(1.0f, 1.0f, 1.0f)){}
 
 void Player::Update(float deltatime)
 {
@@ -54,20 +54,41 @@ void Player::Jump()
 	}
 }
 
-void Player::CheckCollision(std::vector <glm::vec3> objects)
+void Player::CheckCollision()
 {
 	for (const auto& object : objects)
-		HandleCollision(object);
-
-}
-
-void Player::HandleCollision(glm::vec3 object)
-{
-	if (playerPosition.y <= object.y + 1.0f && playerPosition.y >= object.y - 1.0f)
 	{
-		playerPosition.y = object.y + 1.0f;
-		velocity.y = 0.0f;
-		onGround = true;
-	}
+		glm::vec3 objectPos = object.first;
+		glm::vec3 objectSize = object.second;
+		bool collisionX = (playerPosition.x + playerSize.x / 2 >= objectPos.x - objectSize.x / 2) && (playerPosition.x - playerSize.x / 2 <= objectPos.x + objectSize.x);
+		bool collisionY = (playerPosition.y + playerSize.y / 2 >= objectPos.y - objectSize.y / 2) && (playerPosition.y - playerSize.y / 2 <= objectPos.y + objectSize.y);
+		bool collisionZ = (playerPosition.z + playerSize.z / 2 >= objectPos.z - objectSize.z / 2) && (playerPosition.z - playerSize.z / 2 <= objectPos.z + objectSize.z);
+		if (collisionX && collisionY && collisionZ)
+		{
+			float Xpenetrationmagnitude = std::min(playerPosition.x + playerSize.x / 2 - objectPos.x - objectSize.x / 2, objectPos.x + objectSize.x / 2 - playerPosition.x - playerSize.x / 2);
+			float Ypenetrationmagnitude = std::min(playerPosition.y + playerSize.y / 2 - objectPos.y - objectSize.y / 2, objectPos.y + objectSize.y / 2 - playerPosition.y - playerSize.y / 2);
+			float Zpenetrationmagnitude = std::min(playerPosition.z + playerSize.z / 2 - objectPos.z - objectSize.z / 2, objectPos.z + objectSize.z / 2 - playerPosition.z - playerSize.z / 2);
+			if (Xpenetrationmagnitude > Ypenetrationmagnitude && Xpenetrationmagnitude > Zpenetrationmagnitude)
+			{
+				playerPosition.x = playerPosition.x < objectPos.x ? objectPos.x - objectSize.x / 2 - playerSize.x / 2 : objectPos.x + objectSize.x / 2 + playerSize.x / 2;
+				velocity.x = 0;
+			}
 
+			else if (Ypenetrationmagnitude > Xpenetrationmagnitude && Ypenetrationmagnitude > Zpenetrationmagnitude)
+			{
+				playerPosition.y = playerPosition.y < objectPos.y ? objectPos.y - objectSize.y / 2 - playerSize.y / 2 : objectPos.y + objectSize.y / 2 + playerSize.y / 2;
+				velocity.y = 0;
+				onGround = true;
+				jump = 0;
+			}
+
+			else if (Zpenetrationmagnitude > Xpenetrationmagnitude && Zpenetrationmagnitude > Ypenetrationmagnitude)
+			{
+				playerPosition.z = playerPosition.z < objectPos.z ? objectPos.z - objectSize.z / 2 - playerSize.z / 2 : objectPos.z + objectSize.z / 2 + playerSize.z / 2;
+				velocity.z = 0;
+			}
+		}
+	}
 }
+
+

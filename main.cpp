@@ -18,10 +18,8 @@ float SCR_WIDTH, SCR_HEIGHT;
 float deltatime = 0.0f;
 float lastframe = 0.0f;
 
-Player player(glm::vec3(0.0f, 1.0f, 0.0f));
+Player player(glm::vec3(0.0f, 2.0f, 0.0f));
 camera Camera(glm::vec3(player.playerPosition.x, player.playerPosition.y + 1.0, player.playerPosition.z + 3.0f));
-std::vector <glm::vec3> objects = { glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 0.0f, 0.0f) };
-
 
 int main()
 {
@@ -68,17 +66,18 @@ int main()
 		lastframe = currentFrame;
 		ProcessInput(window, deltatime);
 		player.Update(deltatime);
-		player.CheckCollision(objects);
+		player.CheckCollision();
 
 
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		cube.DrawSprite(Camera, player.playerPosition, glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, glm::vec3(0.5f, 1.0f, 1.0f), SCR_WIDTH, SCR_HEIGHT);
+		cube.DrawSprite(player, Camera, player.playerPosition, glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, glm::vec3(0.5f, 1.0f, 1.0f), SCR_WIDTH, SCR_HEIGHT);
 
-		for (const auto& object : objects) {
-			cube.DrawSprite(Camera, object, glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f), SCR_WIDTH, SCR_HEIGHT);
-		}
+		
+		cube.DrawSprite(player, Camera, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f), SCR_WIDTH, SCR_HEIGHT);
+		cube.DrawSprite(player, Camera, glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f), SCR_WIDTH, SCR_HEIGHT);
+		
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}

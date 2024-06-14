@@ -16,16 +16,14 @@ public:
 	float gravity;
 	float jumpStrength;
 	float speedCap;
-	
+	std::vector <std::pair<glm::vec3, glm::vec3>> objects;
+	glm::vec3 playerSize;
 
 	Player(glm::vec3 startingPosition);
 	void Update(float deltatime);
 	void ApplyForce(glm::vec3 gravityforce);
 	void Jump();
-	void CheckCollision(std::vector <glm::vec3> objects);
-
-private:
-	void HandleCollision(glm::vec3 object);
+	void CheckCollision();
 };
 
 #endif // !PLAYER_H
