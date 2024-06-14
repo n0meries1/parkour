@@ -75,8 +75,8 @@ int main()
 		cube.DrawSprite(player, Camera, player.playerPosition, glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, glm::vec3(0.5f, 1.0f, 1.0f), SCR_WIDTH, SCR_HEIGHT);
 
 		
-		cube.DrawSprite(player, Camera, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f), SCR_WIDTH, SCR_HEIGHT);
-		cube.DrawSprite(player, Camera, glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f), SCR_WIDTH, SCR_HEIGHT);
+		cube.DrawSprite(player, Camera, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f), SCR_WIDTH, SCR_HEIGHT);
+		cube.DrawSprite(player, Camera, glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f), SCR_WIDTH, SCR_HEIGHT);
 		
 		glfwSwapBuffers(window);
 		glfwPollEvents();
