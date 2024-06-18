@@ -37,7 +37,7 @@ void renderer::DrawSprite(Player player, camera Camera, glm::vec3 position, glm:
     model = glm::scale(model, size);
     glm::mat4 projection = glm::perspective(glm::radians(m_Camera.m_zoom), SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
     glm::mat4 view = m_Camera.GetViewMatrix();
-    player.objects.push_back (std::make_pair(position, size));
+ 
 
     this->Shader.SetMatrix4("model", model);
     this->Shader.SetMatrix4("projection", projection);

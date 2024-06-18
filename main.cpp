@@ -18,8 +18,18 @@ float SCR_WIDTH, SCR_HEIGHT;
 float deltatime = 0.0f;
 float lastframe = 0.0f;
 
-Player player(glm::vec3(0.0f, 2.0f, 0.0f));
+Player player(glm::vec3(0.0f, 5.0f, 0.0f));
 camera Camera(glm::vec3(player.playerPosition.x, player.playerPosition.y + 1.0, player.playerPosition.z + 3.0f));
+std::vector <glm::vec3> toDraw
+{ 
+	glm::vec3(-3.0f, 3.0f,0.0f), glm::vec3(3.0f, 3.0f, 3.0f),
+	glm::vec3(0.0f, 0.0f,0.0f), glm::vec3(3.0f, 3.0f, 3.0f), 
+	glm::vec3(7.0f, 0.0f, 0.0f), glm::vec3(3.0f, 3.0f, 3.0f), 
+	glm::vec3(15.0f, 0.0f, 0.0f), glm::vec3(3.0f, 3.0f, 3.0f), 
+	glm::vec3(22.0f, 2.0f, 2.0f), glm::vec3(3.0f, 3.0f, 3.0f),
+	glm::vec3(30.0f, 4.0f, 5.0f), glm::vec3(3.0f, 3.0f, 3.0f),
+	glm::vec3(37.0f, 8.0f, 7.0f), glm::vec3(3.0f, 3.0f, 3.0f),
+};
 
 int main()
 {
@@ -58,6 +68,7 @@ int main()
 		return -1;
 	}
 
+	glEnable(GL_DEPTH_TEST);
 	renderer cube("Resource/cubeVertex.shader", "Resource/cubeFragment.shader");
 	while (!glfwWindowShouldClose(window))
 	{
@@ -66,7 +77,6 @@ int main()
 		lastframe = currentFrame;
 		ProcessInput(window, deltatime);
 		player.Update(deltatime);
-		player.CheckCollision();
 
 
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -74,9 +84,12 @@ int main()
 
 		cube.DrawSprite(player, Camera, player.playerPosition, glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, glm::vec3(0.5f, 1.0f, 1.0f), SCR_WIDTH, SCR_HEIGHT);
 
-		
-		cube.DrawSprite(player, Camera, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f), SCR_WIDTH, SCR_HEIGHT);
-		cube.DrawSprite(player, Camera, glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f), SCR_WIDTH, SCR_HEIGHT);
+		for (int i = 0; i < toDraw.size(); i+=2)
+		{
+			cube.DrawSprite(player, Camera, toDraw[i], toDraw[i+1], 0.0f, glm::vec3(1.0f, 1.0f, 1.0f), SCR_WIDTH, SCR_HEIGHT);
+			player.objects.push_back(std::make_pair(toDraw[i], toDraw[i+1]));
+		}
+
 		
 		glfwSwapBuffers(window);
 		glfwPollEvents();
