@@ -2,27 +2,13 @@
 
 Player::Player(glm::vec3 startingPosition) 
     : playerPosition(startingPosition), velocity(0.0f), acceleration(0.0f), 
-      onGround(true), gravity(-9.18f), jumpStrength(5.50f), jump(false), speedCap(10.0f), playerSize(glm::vec3(1.0f, 1.0f, 1.0f)) {}
+      onGround(true), gravity(-9.18f), jumpStrength(5.50f), jumpheight(30.0f), speedCap(10.0f), playerSize(glm::vec3(1.0f, 1.0f, 1.0f)) {}
 
 void Player::Update(float deltatime)
 {
     if (!onGround)
     {
         velocity.y += gravity * deltatime * 5;
-    }
-
-    if (jump != 0)
-    {
-        if (jump >= 50)
-        {
-            velocity.y = 0.0f;
-            jump = 0;
-        }
-        else
-        {
-            jump += 1;
-            velocity.y += jumpStrength * deltatime * 50;
-        }
     }
 
     float speed = glm::length(glm::vec2(velocity.x, velocity.z));
@@ -51,7 +37,7 @@ void Player::Jump()
 {
     if (onGround)
     {
-        jump = 1;
+        velocity.y = sqrt(2 * std::abs(gravity) * jumpheight);
         onGround = false;
     }
 }
@@ -92,7 +78,7 @@ void Player::CheckCollision()
                     playerPosition.y = objectPos.y + objectSize.y / 2 + playerSize.y / 2;
                     velocity.y = 0;
                     onGround = true;
-                    jump = 0;
+                  
                 }
             }
             else if (penetrationX < penetrationY && penetrationX < penetrationZ)

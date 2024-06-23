@@ -20,15 +20,68 @@ float lastframe = 0.0f;
 
 Player player(glm::vec3(0.0f, 5.0f, 0.0f));
 camera Camera(glm::vec3(player.playerPosition.x, player.playerPosition.y + 1.0, player.playerPosition.z + 3.0f));
-std::vector <glm::vec3> toDraw
-{ 
-	glm::vec3(-3.0f, 3.0f,0.0f), glm::vec3(3.0f, 3.0f, 3.0f),
-	glm::vec3(0.0f, 0.0f,0.0f), glm::vec3(3.0f, 3.0f, 3.0f), 
-	glm::vec3(7.0f, 0.0f, 0.0f), glm::vec3(3.0f, 3.0f, 3.0f), 
-	glm::vec3(15.0f, 0.0f, 0.0f), glm::vec3(3.0f, 3.0f, 3.0f), 
-	glm::vec3(22.0f, 2.0f, 2.0f), glm::vec3(3.0f, 3.0f, 3.0f),
-	glm::vec3(30.0f, 4.0f, 5.0f), glm::vec3(3.0f, 3.0f, 3.0f),
-	glm::vec3(37.0f, 8.0f, 7.0f), glm::vec3(3.0f, 3.0f, 3.0f),
+
+std::vector <glm::vec3> toDraw{
+	// Obstacle 1
+	glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(3.0f, 3.0f, 3.0f),
+	// Obstacle 2
+	glm::vec3(5.0f, 1.0f, 0.0f), glm::vec3(2.0f, 1.0f, 2.0f),
+	// Obstacle 3
+	glm::vec3(10.0f, 2.0f, 0.0f), glm::vec3(4.0f, 1.0f, 4.0f),
+	// Obstacle 4
+	glm::vec3(15.0f, 3.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f),
+	// Obstacle 5
+	glm::vec3(20.0f, 0.0f, 0.0f), glm::vec3(3.0f, 2.0f, 3.0f),
+	// Obstacle 6
+	glm::vec3(25.0f, 1.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f),
+	// Obstacle 7
+	glm::vec3(30.0f, 2.0f, 0.0f), glm::vec3(3.0f, 2.0f, 3.0f),
+	// Obstacle 8
+	glm::vec3(35.0f, 1.0f, 0.0f), glm::vec3(2.0f, 1.0f, 2.0f),
+	// Obstacle 9
+	glm::vec3(40.0f, 2.0f, 0.0f), glm::vec3(3.0f, 3.0f, 3.0f),
+	// Obstacle 10
+	glm::vec3(45.0f, 3.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)
+	//// Obstacle 11
+	//glm::vec3(50.0f, 0.0f, 0.0f), glm::vec3(4.0f, 2.0f, 4.0f),
+	//// Obstacle 12
+	//glm::vec3(55.0f, 1.0f, 0.0f), glm::vec3(2.0f, 1.0f, 2.0f),
+	//// Obstacle 13
+	//glm::vec3(60.0f, 2.0f, 0.0f), glm::vec3(3.0f, 2.0f, 3.0f),
+	//// Obstacle 14
+	//glm::vec3(65.0f, 1.0f, 0.0f), glm::vec3(2.0f, 3.0f, 2.0f),
+	//// Obstacle 15
+	//glm::vec3(70.0f, 3.0f, 0.0f), glm::vec3(3.0f, 1.0f, 3.0f),
+	//// Obstacle 16
+	//glm::vec3(75.0f, 0.0f, 0.0f), glm::vec3(4.0f, 2.0f, 4.0f),
+	//// Obstacle 17
+	//glm::vec3(80.0f, 1.0f, 0.0f), glm::vec3(2.0f, 1.0f, 2.0f),
+	//// Obstacle 18
+	//glm::vec3(85.0f, 2.0f, 0.0f), glm::vec3(3.0f, 2.0f, 3.0f),
+	//// Obstacle 19
+	//glm::vec3(90.0f, 1.0f, 0.0f), glm::vec3(2.0f, 3.0f, 2.0f),
+	//// Obstacle 20
+	//glm::vec3(95.0f, 3.0f, 0.0f), glm::vec3(3.0f, 1.0f, 3.0f),
+	//// Obstacle 21
+	//glm::vec3(100.0f, 0.0f, 0.0f), glm::vec3(4.0f, 2.0f, 4.0f),
+	//// Obstacle 22
+	//glm::vec3(105.0f, 1.0f, 0.0f), glm::vec3(2.0f, 1.0f, 2.0f),
+	//// Obstacle 23
+	//glm::vec3(110.0f, 2.0f, 0.0f), glm::vec3(3.0f, 2.0f, 3.0f),
+	//// Obstacle 24
+	//glm::vec3(115.0f, 1.0f, 0.0f), glm::vec3(2.0f, 3.0f, 2.0f),
+	//// Obstacle 25
+	//glm::vec3(120.0f, 3.0f, 0.0f), glm::vec3(3.0f, 1.0f, 3.0f),
+	//// Obstacle 26
+	//glm::vec3(125.0f, 0.0f, 0.0f), glm::vec3(4.0f, 2.0f, 4.0f),
+	//// Obstacle 27
+	//glm::vec3(130.0f, 1.0f, 0.0f), glm::vec3(2.0f, 1.0f, 2.0f),
+	//// Obstacle 28
+	//glm::vec3(135.0f, 2.0f, 0.0f), glm::vec3(3.0f, 2.0f, 3.0f),
+	//// Obstacle 29
+	//glm::vec3(140.0f, 1.0f, 0.0f), glm::vec3(2.0f, 3.0f, 2.0f),
+	//// Obstacle 30
+	//glm::vec3(145.0f, 3.0f, 0.0f), glm::vec3(3.0f, 1.0f, 3.0f),
 };
 
 int main()
@@ -69,7 +122,8 @@ int main()
 	}
 
 	glEnable(GL_DEPTH_TEST);
-	renderer cube("Resource/cubeVertex.shader", "Resource/cubeFragment.shader");
+	renderer playercharacter("Resource/cubeVertex.shader", "Resource/cubeFragment.shader", "Resource/grassblock.jpg", false);
+	renderer cube("Resource/cubeVertex.shader", "Resource/cubeFragment.shader", "Resource/brick.png", false);
 	while (!glfwWindowShouldClose(window))
 	{
 		float currentFrame = static_cast <float> (glfwGetTime());
@@ -82,7 +136,7 @@ int main()
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		cube.DrawSprite(player, Camera, player.playerPosition, glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, glm::vec3(0.5f, 1.0f, 1.0f), SCR_WIDTH, SCR_HEIGHT);
+		playercharacter.DrawSprite(player, Camera, player.playerPosition, glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f), SCR_WIDTH, SCR_HEIGHT);
 
 		for (int i = 0; i < toDraw.size(); i+=2)
 		{
@@ -199,3 +253,4 @@ void ProcessScrollInput(GLFWwindow* window, double xoffset, double yoffset)
 	Camera.ProcessScrollMovement(static_cast<float>(yoffset));
 	
 }
+

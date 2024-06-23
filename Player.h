@@ -12,7 +12,7 @@ public:
 	glm::vec3 velocity;
 	glm::vec3 acceleration;
 	bool onGround;
-	unsigned int jump;
+	float jumpheight;
 	float gravity;
 	float jumpStrength;
 	float speedCap;

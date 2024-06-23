@@ -26,4 +26,6 @@ private:
 	bool noTexture;
 	void initRenderData();
 };
+
+
 #endif RENDERER_H

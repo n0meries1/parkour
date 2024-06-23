@@ -9,6 +9,7 @@ texture::texture(const char* filepath, bool alpha)
 		return;
 	}
 
+	
 	int width, height, nrChannels;
 	unsigned char* data = stbi_load(filepath, &width, &height, &nrChannels, 0);
 	if (!data)
@@ -17,18 +18,36 @@ texture::texture(const char* filepath, bool alpha)
 		throw std::runtime_error("Failed to laod texture");
 	}
 
-	stbi_image_free(data);
 
 	glGenTextures(1, &this->ID);
 	glBindTexture(GL_TEXTURE_2D, this->ID);
 
 	if (alpha)
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		if (nrChannels == 4)
+		{
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		}
+		else
+		{
+			std::cerr << "ERROR::TEXTURE: Expected 4 channels for alpha, but got " << nrChannels << std::endl;
+		}
 	}
 	else
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		if (nrChannels == 3)
+		{
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		}
+		else if (nrChannels == 4)
+		{
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+			std::cerr << "WARNING::TEXTURE: Loaded 4-channel image without alpha flag. Possible unintended transparency." << std::endl;
+		}
+		else
+		{
+			std::cerr << "ERROR::TEXTURE: Unsupported number of channels " << nrChannels << std::endl;
+		}
 	}
 	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -36,6 +55,7 @@ texture::texture(const char* filepath, bool alpha)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	stbi_image_free(data);
 	loaded = true;
 }
 
