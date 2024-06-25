@@ -36,6 +36,9 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="freetype.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="renderer.h">
@@ -56,6 +59,9 @@
     <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="freetype.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="parkour.rc">
@@ -67,6 +73,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Resource\cubeFragment.shader">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\textFragment.shader">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\textVertex.shader">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

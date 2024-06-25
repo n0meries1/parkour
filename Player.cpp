@@ -23,8 +23,7 @@ void Player::Update(float deltatime)
     onGround = false;
     CheckCollision();
 
-    if (playerPosition.y < -20.0f)
-        playerPosition = glm::vec3(0.0f, 5.0f, 0.0f);
+
 }
 
 void Player::ApplyForce(glm::vec3 gravityforce)

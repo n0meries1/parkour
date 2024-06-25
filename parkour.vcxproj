@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="freetype.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -161,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
+    <ClInclude Include="freetype.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="resource.h" />
@@ -173,6 +175,8 @@
   <ItemGroup>
     <None Include="Resource\cubeVertex.shader" />
     <None Include="Resource\cubeFragment.shader" />
+    <None Include="Resource\textFragment.shader" />
+    <None Include="Resource\textVertex.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
