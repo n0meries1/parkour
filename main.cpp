@@ -28,6 +28,7 @@ unsigned int Skybox();
 unsigned int LoadCubeMap(std::vector <std::string> faces);
 void RenderSkybox(shader& skyboxshader, unsigned int skyboxVAO, unsigned int skyboxtexture, glm::mat4 view, glm::mat4 projection);
 void InitIMGUI(GLFWwindow* window);
+void ImGUI();
 
 // screen parameters, delta time parameters
 float SCR_WIDTH, SCR_HEIGHT;
@@ -44,6 +45,9 @@ std::chrono::steady_clock::time_point starttime;
 double elapsedtime = 0.0f;
 std::string timer;
 bool disconnect = false;
+ImVec4 playercolor = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+ImVec4 environmentcolor = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+
 
 
 
@@ -135,7 +139,6 @@ int main()
 	
 	TextRenderer textrenderer(SCR_WIDTH, SCR_HEIGHT);
 	textrenderer.LoadFont("Resource/font.ttf", 24);
-	Soundengine->play2D("Resource/bgm.mp3", true);
 	shader skyboxshader("Resource/skyboxVertex.shader", "Resource/skyboxFragment.shader");
 	unsigned int skyboxVAO = Skybox();
 	unsigned int cubemaptexture = LoadCubeMap(faces);
@@ -151,37 +154,28 @@ int main()
 
 		ProcessInput(window, deltatime);
 		player.Update(deltatime);
-
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		
+		glClearColor(0.1f, 0.1f,0.1f,0.1f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-		playercharacter.DrawSprite(player, Camera, player.playerPosition, glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f), SCR_WIDTH, SCR_HEIGHT);
+		playercharacter.DrawSprite(player, Camera, player.playerPosition, glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, glm::vec3(playercolor.x, playercolor.y, playercolor.z), SCR_WIDTH, SCR_HEIGHT);
 
 		for (int i = 0; i < toDraw.size(); i+=2)
 		{
-			cube.DrawSprite(player, Camera, toDraw[i], toDraw[i+1], 0.0f, glm::vec3(1.0f, 1.0f, 1.0f), SCR_WIDTH, SCR_HEIGHT);
+			cube.DrawSprite(player, Camera, toDraw[i], toDraw[i+1], 0.0f, glm::vec3(environmentcolor.x, environmentcolor.y, environmentcolor.z), SCR_WIDTH, SCR_HEIGHT);
 			player.objects.push_back(std::make_pair(toDraw[i], toDraw[i+1]));
 		}
-		glm::mat4 projection = glm::perspective(glm::radians(45.0f), static_cast <float>(SCR_WIDTH) / static_cast <float> (SCR_HEIGHT), 0.1f, 100.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(45.0f), static_cast<float>(SCR_WIDTH) / static_cast<float>(SCR_HEIGHT), 0.1f, 100.0f);
 		RenderSkybox(skyboxshader, skyboxVAO, cubemaptexture, Camera.GetViewMatrix(), projection);
-		timerEnd();
+
 		textrenderer.RenderText(timer, SCR_WIDTH / 2 - 50, SCR_HEIGHT - 50.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
 		FrameCounter();
 		textrenderer.RenderText(fpscounter, 25.0f, SCR_HEIGHT - 50.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
 		
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-		ImGui::Begin("Settings");
-		ImGui::Text("Panel to adjust game settings");
-		ImGui::SliderFloat("Speed Cap", &player.speedCap, 5.0f, 100.0f);
-		ImGui::SliderFloat("Jump Height", &player.jumpheight, 0.0f, 100.0f);
-		ImGui::End();
+		ImGUI();
 
-		ImGui::Render();
-
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		timerEnd();
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
@@ -231,6 +225,7 @@ void InitGLAD()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDisable(GL_CULL_FACE);
+	Soundengine->play2D("Resource/bgm.mp3", true);
 }
 
 void SetupCallbacks(GLFWwindow* window)
@@ -401,51 +396,50 @@ void FrameCounter()
 	fpscounter = "FPS: " + std::to_string(fps);
 }
 
-unsigned int Skybox()
-{
-	float skyboxVertices[] =
-	{
-	-1.0f,  1.0f, -1.0f,
-	-1.0f, -1.0f, -1.0f,
-	 1.0f, -1.0f, -1.0f,
-	 1.0f, -1.0f, -1.0f,
-	 1.0f,  1.0f, -1.0f,
-	-1.0f,  1.0f, -1.0f,
+unsigned int Skybox() {
+	float skyboxVertices[] = {
+   
+		-1.0f,  1.0f, -1.0f,
+		-1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
 
-	-1.0f, -1.0f,  1.0f,
-	-1.0f, -1.0f, -1.0f,
-	-1.0f,  1.0f, -1.0f,
-	-1.0f,  1.0f, -1.0f,
-	-1.0f,  1.0f,  1.0f,
-	-1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
 
-	 1.0f, -1.0f, -1.0f,
-	 1.0f, -1.0f,  1.0f,
-	 1.0f,  1.0f,  1.0f,
-	 1.0f,  1.0f,  1.0f,
-	 1.0f,  1.0f, -1.0f,
-	 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
 
-	-1.0f, -1.0f,  1.0f,
-	-1.0f,  1.0f,  1.0f,
-	 1.0f,  1.0f,  1.0f,
-	 1.0f,  1.0f,  1.0f,
-	 1.0f, -1.0f,  1.0f,
-	-1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
 
-	-1.0f,  1.0f, -1.0f,
-	 1.0f,  1.0f, -1.0f,
-	 1.0f,  1.0f,  1.0f,
-	 1.0f,  1.0f,  1.0f,
-	-1.0f,  1.0f,  1.0f,
-	-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f, -1.0f,
 
-	-1.0f, -1.0f, -1.0f,
-	-1.0f, -1.0f,  1.0f,
-	 1.0f, -1.0f, -1.0f,
-	 1.0f, -1.0f, -1.0f,
-	-1.0f, -1.0f,  1.0f,
-	 1.0f, -1.0f,  1.0f
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f
 	};
 
 	unsigned int skyboxVAO, skyboxVBO;
@@ -457,31 +451,30 @@ unsigned int Skybox()
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glBindVertexArray(0);
+
 	return skyboxVAO;
 }
 
 
 
-unsigned int LoadCubeMap(std::vector <std::string> faces)
-{
+
+
+unsigned int LoadCubeMap(std::vector<std::string> faces) {
 	unsigned int textureID;
 	glGenTextures(1, &textureID);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
 
 	int width, height, nrChannels;
-	for (unsigned int i = 0; i < faces.size(); i++)
-	{
+	for (unsigned int i = 0; i < faces.size(); i++) {
 		stbi_set_flip_vertically_on_load(false);
 		unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
-		if (data)
-		{
+		if (data) {
 			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 			stbi_image_free(data);
-			std::cout << "Loaded " << faces[i] << "successfully" << std::endl;	
+			std::cout << "Loaded " << faces[i] << " successfully" << std::endl;
 		}
-		else
-		{
-			std::cout << "Cubemap texture failed" << std::endl;
+		else {
+			std::cout << "Failed to load " << faces[i] << std::endl;
 			stbi_image_free(data);
 		}
 	}
@@ -494,22 +487,19 @@ unsigned int LoadCubeMap(std::vector <std::string> faces)
 	return textureID;
 }
 
-void RenderSkybox(shader &skyboxshader,unsigned int skyboxVAO, unsigned int skyboxtexture, glm::mat4 view, glm::mat4 projection)
-{
+
+void RenderSkybox(shader& skyboxshader, unsigned int skyboxVAO, unsigned int skyboxtexture, glm::mat4 view, glm::mat4 projection) {
 	glDepthFunc(GL_LEQUAL);
 	skyboxshader.Use();
-	view = glm::mat4(glm::mat3(view));
-	skyboxshader.SetMatrix4("view", view); 
+	skyboxshader.SetMatrix4("view", glm::mat4(glm::mat3(view))); 
 	skyboxshader.SetMatrix4("projection", projection);
-
 	glBindVertexArray(skyboxVAO);
-	glActiveTexture(GL_TEXTURE0); 
 	glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxtexture);
-
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
-	glDepthFunc(GL_LESS); 
+	glDepthFunc(GL_LESS);
 }
+
 
 void InitIMGUI(GLFWwindow* window)
 {
@@ -520,4 +510,22 @@ void InitIMGUI(GLFWwindow* window)
 	ImGui::StyleColorsDark();
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 410");
+}
+
+void ImGUI()
+{
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+	ImGui::Begin("Settings");
+	ImGui::Text("PRESS LEFT ALT TO ENABLE CURSOR");
+	ImGui::SliderFloat("Speed Cap", &player.speedCap, 5.0f, 100.0f);
+	ImGui::SliderFloat("Jump Height", &player.jumpheight, 0.0f, 100.0f);
+	ImGui::ColorPicker4("Change Player Color", (float*)&playercolor);
+	ImGui::ColorPicker4("Change Environment Color", (float*)&environmentcolor);
+	ImGui::End();
+
+	ImGui::Render();
+
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
