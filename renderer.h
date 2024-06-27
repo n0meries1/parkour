@@ -16,7 +16,7 @@ public:
 	renderer(const char* vertex, const char* fragment);
 	~renderer();
 	void DrawSprite(Player player, camera Camera, glm::vec3 position, glm::vec3 size, float rotate, glm::vec3 color, float SCR_WIDTH, float SCR_HEIGHT);
-	
+	glm::mat4 projection;
 	
 private:
 	camera m_Camera;
